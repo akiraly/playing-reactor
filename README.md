@@ -16,9 +16,10 @@ Links, materials and notes about reactive programming with reactor
 1. [Introduction to Reactive Programming by a core developer of Vert.x (interview + 2 playgrounds)](https://www.reddit.com/r/java/comments/6q4moe/xpost_from_rprogramming_introduction_to_reactive/)
 1. [Marble diagrams examples](https://github.com/politrons/reactive)
 
-# Links
+# Other Links
 1. [Reactive Programming wikipedia](https://en.wikipedia.org/wiki/Reactive_programming)
 1. [The Reactive Manifesto](http://www.reactivemanifesto.org)
 1. [Reactive Streams](http://www.reactive-streams.org)
 1. [Project Reactor](http://projectreactor.io)
 1. [Reactor github](https://github.com/reactor/reactor-core)
+1. [RxMarbles: Interactive diagrams of Rx Observables](http://rxmarbles.com)
