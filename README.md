@@ -3,7 +3,12 @@ Links, materials and notes about reactive programming with reactor
 
 # What is Reactive Programming?
 
-> Reactive programming [...] is a subset of asynchronous programming and a paradigm where the availability of new information drives the logic forward rather than having control flow driven by a thread-of-execution. [1]
+> Reactive programming [...] is a subset of asynchronous programming and a paradigm where the availability of new information drives the logic forward rather than having control flow driven by a thread-of-execution. [[ref](https://www.oreilly.com/ideas/reactive-programming-vs-reactive-systems)]
+
+# Marble diagrams?
+
+Example:
+![example marble diagram](https://raw.githubusercontent.com/wiki/ReactiveX/RxJava/images/rx-operators/legend.png)[[ref](http://www.java-allandsundry.com/2016/02/marble-diagrams-rxjava-operators.html)]
 
 # Articles
 1. [Reactive programming vs. Reactive systems](https://www.oreilly.com/ideas/reactive-programming-vs-reactive-systems)
