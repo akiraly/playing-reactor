@@ -3,7 +3,7 @@ Links, materials and notes about reactive programming with reactor
 
 # What is Reactive Programming?
 
-> Reactive programming, not to be confused with functional reactive programming, is a subset of asynchronous programming and a paradigm where the availability of new information drives the logic forward rather than having control flow driven by a thread-of-execution. [1]
+> Reactive programming [...] is a subset of asynchronous programming and a paradigm where the availability of new information drives the logic forward rather than having control flow driven by a thread-of-execution. [1]
 
 # Articles
 1. [Reactive programming vs. Reactive systems](https://www.oreilly.com/ideas/reactive-programming-vs-reactive-systems)
