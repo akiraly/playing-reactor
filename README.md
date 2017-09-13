@@ -59,6 +59,8 @@ Example:
 
 # Mono
 
+![Mono marble](http://ordina-jworks.github.io/img/reactive/mono.png)[[ref](http://ordina-jworks.github.io/reactive/2016/12/12/Reactive-Programming-Spring-Reactor.html)]
+
 # Articles
 1. [Reactive programming vs. Reactive systems](https://www.oreilly.com/ideas/reactive-programming-vs-reactive-systems)
 1. [Best resource for learning RxJava](https://www.reddit.com/r/java/comments/6vkw50/best_resource_for_learning_rxjava/)
