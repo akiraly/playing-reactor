@@ -75,6 +75,7 @@ Example:
 1. [Introduction to Reactive Programming](https://www.infoq.com/presentations/rxjava-reactor)
 1. [Reactive Programming With Spring Reactor](http://ordina-jworks.github.io/reactive/2016/12/12/Reactive-Programming-Spring-Reactor.html)
 1. [The Reactive Scrabble benchmarks by akarnokd blog](http://akarnokd.blogspot.hu/2016/12/the-reactive-scrabble-benchmarks.html)
+1. [Reactor – Simple Ways to create Flux/Mono](http://javasampleapproach.com/reactive-programming/reactor/reactor-create-flux-and-mono-simple-ways-to-create-publishers-reactive-programming)
 
 # Other Links
 1. [Reactive Programming wikipedia](https://en.wikipedia.org/wiki/Reactive_programming)
