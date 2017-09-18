@@ -176,6 +176,8 @@ flux.blockFirst();
 1. [Reactive Programming wikipedia](https://en.wikipedia.org/wiki/Reactive_programming)
 1. [The Reactive Manifesto](http://www.reactivemanifesto.org)
 1. [Reactive Streams](http://www.reactive-streams.org)
+1. [Reactor reference](http://projectreactor.io/docs/core/release/reference/)
+1. [Reactor javadoc](https://projectreactor.io/docs/core/release/api/)
 1. [Project Reactor](http://projectreactor.io)
 1. [Reactor github](https://github.com/reactor/reactor-core)
 1. [RxMarbles: Interactive diagrams of Rx Observables](http://rxmarbles.com)
