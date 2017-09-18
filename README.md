@@ -91,8 +91,8 @@ mono.block(); // subscribes + waits... this operation exits the reactor world.
 
 Just think about them as thread pools. You use different kind of thread pools for different kind of operations.
 
-`Schedulers.parallel()` -> CPU intensive operations
-`Schedulers.elastic()` -> Everything that involves waiting, for example db/network/file/ldap write/read.
+* `Schedulers.parallel()` -> CPU intensive operations
+* `Schedulers.elastic()` -> Everything that involves waiting, for example db/network/file/ldap write/read.
 
 Differences to `Collection.parallelStream()` and `CompletableFuture.supplyAsync()`.
 
