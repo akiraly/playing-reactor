@@ -53,7 +53,7 @@ Example:
 
 # Backpressure?
 
-> the ability for the consumer to signal the producer that the rate of emission is too high for it to keep up [[ref][http://projectreactor.io/docs/core/release/reference/#_from_imperative_to_reactive_programming]]
+> the ability for the consumer to signal the producer that the rate of emission is too high for it to keep up [[ref](http://projectreactor.io/docs/core/release/reference/#_from_imperative_to_reactive_programming)]
 
 # Flux
 
