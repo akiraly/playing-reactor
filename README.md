@@ -92,9 +92,11 @@ Just think about them as thread pools. You use different kind of thread pools fo
 `Schedulers.parallel()` -> CPU intensive operations
 `Schedulers.elastic()` -> Everything that involves waiting, for example db/network/file/ldap write/read.
 
+Differences to `Collection.parallelStream()` and `CompletableFuture.supplyAsync()`.
+
 Example:
 ```java
-Flux<Integer> flux = Flux.just(1, 2)
+Flux<Integer> flux = Flux.just(10, 15)
 	.log() // built in logging, uses slf4j if on classpath
 	.publishOn(Schedulers.parallel()) // or subscribeOn()
 	.log()
@@ -120,20 +122,19 @@ Output:
 [main] INFO reactor.Flux.FlatMap.3 - request(256)
 [main] INFO reactor.Flux.PublishOn.2 - | request(256)
 [main] INFO reactor.Flux.Array.1 - | request(256)
-[main] INFO reactor.Flux.Array.1 - | onNext(1)
-[main] INFO reactor.Flux.Array.1 - | onNext(2)
-[parallel-2] INFO reactor.Flux.PublishOn.2 - | onNext(1)
+[main] INFO reactor.Flux.Array.1 - | onNext(10)
+[main] INFO reactor.Flux.Array.1 - | onNext(15)
+[parallel-2] INFO reactor.Flux.PublishOn.2 - | onNext(10)
 [main] INFO reactor.Flux.Array.1 - | onComplete()
-[parallel-2] INFO reactor.Flux.PublishOn.2 - | onNext(2)
-[parallel-3] INFO reactor.Flux.FlatMap.3 - onNext(2)
+[parallel-2] INFO reactor.Flux.PublishOn.2 - | onNext(15)
+[parallel-3] INFO reactor.Flux.FlatMap.3 - onNext(20)
 [parallel-2] INFO reactor.Flux.PublishOn.2 - | onComplete()
-[parallel-1] INFO reactor.Flux.PublishOn.4 - | onNext(2)
-[parallel-3] INFO reactor.Flux.PublishOn.2 - | request(1)
-[parallel-1] INFO reactor.Flux.MapFuseable.5 - | onNext(0)
-[parallel-4] INFO reactor.Flux.FlatMap.3 - onNext(4)
-[parallel-1] INFO reactor.Flux.PublishOn.4 - | onNext(4)
-[parallel-1] INFO reactor.Flux.MapFuseable.5 - | onNext(2)
+[parallel-1] INFO reactor.Flux.PublishOn.4 - | onNext(20)
+[parallel-1] INFO reactor.Flux.MapFuseable.5 - | onNext(18)
+[parallel-4] INFO reactor.Flux.FlatMap.3 - onNext(30)
 [parallel-4] INFO reactor.Flux.FlatMap.3 - onComplete()
+[parallel-1] INFO reactor.Flux.PublishOn.4 - | onNext(30)
+[parallel-1] INFO reactor.Flux.MapFuseable.5 - | onNext(28)
 [parallel-1] INFO reactor.Flux.PublishOn.4 - | onComplete()
 [parallel-1] INFO reactor.Flux.MapFuseable.5 - | onComplete()
 ```
