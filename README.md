@@ -57,9 +57,103 @@ Example:
 
 ![Flux marble](http://ordina-jworks.github.io/img/reactive/flux.png)[[ref](http://ordina-jworks.github.io/reactive/2016/12/12/Reactive-Programming-Spring-Reactor.html)]
 
+Represents stream of 0 to many elements. Sends 0..N signals + an error or completion signal.
+
+It is similar to `java.util.Stream` but even more similar to `java.util.Iterable` as a `Flux` is reusable.
+
+Example:
+```java
+Flux<String> flux = Flux.just("Hello,", " world!"); // creates Flux with a static method
+
+flux.subscribe(); // need to subscribe to start the data flow
+flux.block(); // subscribes + waits... this operation exits the reactor world.
+```
+
 # Mono
 
 ![Mono marble](http://ordina-jworks.github.io/img/reactive/mono.png)[[ref](http://ordina-jworks.github.io/reactive/2016/12/12/Reactive-Programming-Spring-Reactor.html)]
+
+Represents 0 to 1 elements. Sends 0..1 signals + an error or completion signal.
+
+It is similar to `java.util.Optional` and `java.util.concurrent.CompletableFuture`. `Mono` is reusable as well.
+
+Example:
+```java
+Mono<String> mono = Mono.just("Hello, world!");
+
+mono.subscribe(); // need to subscribe to start the data flow
+mono.block(); // subscribes + waits... this operation exits the reactor world.
+```
+
+# Schedulers
+
+Just think about them as thread pools. You use different kind of thread pools for different kind of operations.
+
+`Schedulers.parallel()` -> CPU intensive operations
+`Schedulers.elastic()` -> Everything that involves waiting, for example db/network/file/ldap write/read.
+
+Example:
+```java
+Flux<Integer> flux = Flux.just(1, 2)
+	.log() // built in logging, uses slf4j if on classpath
+	.publishOn(Schedulers.parallel()) // or subscribeOn()
+	.log()
+	.flatMap(i -> Mono.fromSupplier(() -> i * 2).publishOn(Schedulers.parallel()))
+	.log()
+	.publishOn(Schedulers.parallel())
+	.log()
+	.map(i -> i - 2)
+	.log();
+
+flux.blockLast();
+```
+
+Output:
+```
+[main] INFO reactor.Flux.Array.1 - | onSubscribe([Synchronous Fuseable] FluxArray.ArraySubscription)
+[main] INFO reactor.Flux.PublishOn.2 - | onSubscribe([Fuseable] FluxPublishOn.PublishOnSubscriber)
+[main] INFO reactor.Flux.FlatMap.3 - onSubscribe(FluxFlatMap.FlatMapMain)
+[main] INFO reactor.Flux.PublishOn.4 - | onSubscribe([Fuseable] FluxPublishOn.PublishOnSubscriber)
+[main] INFO reactor.Flux.MapFuseable.5 - | onSubscribe([Fuseable] FluxMapFuseable.MapFuseableSubscriber)
+[main] INFO reactor.Flux.MapFuseable.5 - | request(unbounded)
+[main] INFO reactor.Flux.PublishOn.4 - | request(unbounded)
+[main] INFO reactor.Flux.FlatMap.3 - request(256)
+[main] INFO reactor.Flux.PublishOn.2 - | request(256)
+[main] INFO reactor.Flux.Array.1 - | request(256)
+[main] INFO reactor.Flux.Array.1 - | onNext(1)
+[main] INFO reactor.Flux.Array.1 - | onNext(2)
+[parallel-2] INFO reactor.Flux.PublishOn.2 - | onNext(1)
+[main] INFO reactor.Flux.Array.1 - | onComplete()
+[parallel-2] INFO reactor.Flux.PublishOn.2 - | onNext(2)
+[parallel-3] INFO reactor.Flux.FlatMap.3 - onNext(2)
+[parallel-2] INFO reactor.Flux.PublishOn.2 - | onComplete()
+[parallel-1] INFO reactor.Flux.PublishOn.4 - | onNext(2)
+[parallel-3] INFO reactor.Flux.PublishOn.2 - | request(1)
+[parallel-1] INFO reactor.Flux.MapFuseable.5 - | onNext(0)
+[parallel-4] INFO reactor.Flux.FlatMap.3 - onNext(4)
+[parallel-1] INFO reactor.Flux.PublishOn.4 - | onNext(4)
+[parallel-1] INFO reactor.Flux.MapFuseable.5 - | onNext(2)
+[parallel-4] INFO reactor.Flux.FlatMap.3 - onComplete()
+[parallel-1] INFO reactor.Flux.PublishOn.4 - | onComplete()
+[parallel-1] INFO reactor.Flux.MapFuseable.5 - | onComplete()
+```
+
+Another example (what is the use case?):
+```java
+Flux<LocalDateTime> flux = Flux.<LocalDateTime>create(e -> {
+  Schedulers.newSingle("brc", true)
+	  .schedulePeriodically(
+		  () -> {
+			LOGGER.info("calculating...");
+			e.next(LocalDateTime.now(ZoneOffset.UTC));
+		  },
+		  0, 100, TimeUnit.MILLISECONDS);
+}, OverflowStrategy.LATEST).cache(1);
+
+// ...
+
+flux.blockFirst();
+```
 
 # Articles
 1. [Reactive programming vs. Reactive systems](https://www.oreilly.com/ideas/reactive-programming-vs-reactive-systems)
