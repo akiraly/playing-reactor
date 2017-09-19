@@ -89,12 +89,14 @@ mono.block(); // subscribes + waits... this operation exits the reactor world.
 
 # Schedulers
 
-Just think about them as thread pools. You use different kind of thread pools for different kind of operations.
+Nothing happens asynchronously - unless we say so explicitly.
+
+This where `Schedulers` come into picture: just think about them as thread pools. You use different kind of thread pools for different kind of operations.
 
 * `Schedulers.parallel()` -> CPU intensive operations
 * `Schedulers.elastic()` -> Everything that involves waiting, for example db/network/file/ldap write/read.
 
-Differences to `Collection.parallelStream()` and `CompletableFuture.supplyAsync()`.
+Differences to `Collection.parallelStream()` and `CompletableFuture.supplyAsync()`. The problem with default `ForkJoinPool`.
 
 Example:
 ```java
