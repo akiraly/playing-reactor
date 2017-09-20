@@ -160,30 +160,54 @@ Flux<LocalDateTime> flux = Flux.<LocalDateTime>create(e -> {
 flux.blockFirst();
 ```
 
-# Articles
-1. [Reactive programming vs. Reactive systems](https://www.oreilly.com/ideas/reactive-programming-vs-reactive-systems)
-1. [Best resource for learning RxJava](https://www.reddit.com/r/java/comments/6vkw50/best_resource_for_learning_rxjava/)
-1. [5 Things to Know About Reactive Programming](https://www.reddit.com/r/java/comments/6x5ikr/5_things_to_know_about_reactive_programming/)
-1. [Loading files with backpressure - RxJava FAQ](https://www.reddit.com/r/java/comments/6xp3hm/loading_files_with_backpressure_rxjava_faq/)
-1. [Introduction to Reactive Streams for Java Developers](https://www.reddit.com/r/java/comments/6v20yj/introduction_to_reactive_streams_for_java/?ref=share&ref_source=link)
-1. [Servlet vs Reactive Stacks in Five Use Cases - presentation](https://www.reddit.com/r/java/comments/6u0d0i/servlet_vs_reactive_stacks_in_five_use_cases/)
-1. [An update on Reactive Streams and what's coming in Java 9 by Viktor Klang](https://www.reddit.com/r/java/comments/6t88wn/an_update_on_reactive_streams_and_whats_coming_in/?ref=share&ref_source=link)
-1. [Introduction to Reactive Programming by a core developer of Vert.x (interview + 2 playgrounds)](https://www.reddit.com/r/java/comments/6q4moe/xpost_from_rprogramming_introduction_to_reactive/)
-1. [Marble diagrams examples](https://github.com/politrons/reactive)
-1. [Marble Diagrams - Rxjava operators](http://www.java-allandsundry.com/2016/02/marble-diagrams-rxjava-operators.html)
-1. [Introduction to Reactive Programming](https://www.infoq.com/presentations/rxjava-reactor)
-1. [Reactive Programming With Spring Reactor](http://ordina-jworks.github.io/reactive/2016/12/12/Reactive-Programming-Spring-Reactor.html)
-1. [The Reactive Scrabble benchmarks by akarnokd blog](http://akarnokd.blogspot.hu/2016/12/the-reactive-scrabble-benchmarks.html)
-1. [Reactor – Simple Ways to create Flux/Mono](http://javasampleapproach.com/reactive-programming/reactor/reactor-create-flux-and-mono-simple-ways-to-create-publishers-reactive-programming)
-1. [An Introduction to Functional Reactive Programming](http://blog.danlew.net/2017/07/27/an-introduction-to-functional-reactive-programming/)
+# Things that you typically don't need to use when using Flux/Mono/Schedulers
 
-# Other Links
+* `synchronized`
+* `Lock`, `ReentrantLock`, `Semaphore`
+* `CountDownLatch`, `CyclicBarrier`
+* `ThreadPoolExecutor`, `ScheduledThreadPoolExecutor`
+* `Future`, `CompletableFuture`
+
+# Pitfalls to be aware of
+
+As with any concurrent programming tool anything (typicall library) that's relying the thread not changing will break if you do it on multiple threds.
+
+Example: `ThreadLocal`. A typical programmer never (or at least very, very rarely) should use `ThreadLocal` directly. However libraries do use it:
+* Slf4j MDC (Mapped Diagnostic Context).
+* Transaction handling with Spring JDBC or Hibernate or MQ-s: Now this is a tricky one. If you have a transaction then you have the following options (as I see it):
+  1. Leave the whole operation single threaded
+  1. Create a single threaded `Scheduler` / transaction and push every transactional operation onto that scheduler (including transaction begin and transaction commit/rollback)
+  1. You say goodbye to your battle proven libraries and roll your own transaction handling which does not depend on `ThreadLocal` - only do this if you feel invincible.
+
+# Articles / Links
+## General
 1. [Reactive Programming wikipedia](https://en.wikipedia.org/wiki/Reactive_programming)
 1. [The Reactive Manifesto](http://www.reactivemanifesto.org)
 1. [Reactive Streams](http://www.reactive-streams.org)
+1. [Reactive programming vs. Reactive systems](https://www.oreilly.com/ideas/reactive-programming-vs-reactive-systems)
+1. [An update on Reactive Streams and what's coming in Java 9 by Viktor Klang](https://www.reddit.com/r/java/comments/6t88wn/an_update_on_reactive_streams_and_whats_coming_in/)
+1. [Introduction to Reactive Programming](https://www.infoq.com/presentations/rxjava-reactor)
+1. [Servlet vs Reactive Stacks in Five Use Cases - presentation](https://www.reddit.com/r/java/comments/6u0d0i/servlet_vs_reactive_stacks_in_five_use_cases/)
+1. [The Reactive Scrabble benchmarks by akarnokd blog](http://akarnokd.blogspot.hu/2016/12/the-reactive-scrabble-benchmarks.html)
+1. [An Introduction to Functional Reactive Programming](http://blog.danlew.net/2017/07/27/an-introduction-to-functional-reactive-programming/)
+1. [Introduction to Reactive Streams for Java Developers](https://www.reddit.com/r/java/comments/6v20yj/introduction_to_reactive_streams_for_java/)
+1. [RxMarbles: Interactive diagrams of Rx Observables](http://rxmarbles.com)
+1. [Marble diagrams examples](https://github.com/politrons/reactive)
+
+## Reactor
 1. [Reactor reference](http://projectreactor.io/docs/core/release/reference/)
 1. [Reactor javadoc](https://projectreactor.io/docs/core/release/api/)
 1. [Project Reactor](http://projectreactor.io)
 1. [Reactor github](https://github.com/reactor/reactor-core)
-1. [RxMarbles: Interactive diagrams of Rx Observables](http://rxmarbles.com)
+1. [Reactor by Example](https://www.infoq.com/articles/reactor-by-example)
 1. [Lite Rx API Hands-On with Reactor Core 3](https://github.com/reactor/lite-rx-api-hands-on)
+1. [Reactive Programming With Spring Reactor](http://ordina-jworks.github.io/reactive/2016/12/12/Reactive-Programming-Spring-Reactor.html)
+1. [Reactor – Simple Ways to create Flux/Mono](http://javasampleapproach.com/reactive-programming/reactor/reactor-create-flux-and-mono-simple-ways-to-create-publishers-reactive-programming)
+1. [Reactive Programming with Reactor 3 (interview + playground)](https://tech.io/blog/reactive-programming-reactor-3/)
+
+## RxJava
+1. [5 Things to Know About Reactive Programming](https://www.reddit.com/r/java/comments/6x5ikr/5_things_to_know_about_reactive_programming/)
+1. [Best resource for learning RxJava](https://www.reddit.com/r/java/comments/6vkw50/best_resource_for_learning_rxjava/)
+1. [Marble Diagrams - Rxjava operators](http://www.java-allandsundry.com/2016/02/marble-diagrams-rxjava-operators.html)
+1. [Loading files with backpressure - RxJava FAQ](https://www.reddit.com/r/java/comments/6xp3hm/loading_files_with_backpressure_rxjava_faq/)
+1. [Introduction to Reactive Programming by a core developer of Vert.x (interview + 2 playgrounds)](https://www.reddit.com/r/java/comments/6q4moe/xpost_from_rprogramming_introduction_to_reactive/)
