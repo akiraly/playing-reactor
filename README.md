@@ -18,7 +18,7 @@ We are focusing on Reactive Programming (the coding part) here not on the System
 1. [Reactive Streams](http://www.reactive-streams.org): The API + TCK
 1. [RxJava 2](https://github.com/ReactiveX/RxJava): Java 6 (and Android) compatible implementation of Reactive Streams
 1. *[Reactor](http://projectreactor.io)*: Java 8 based implementation of Reactive Streams. Developed by the Spring Team, to be used in Spring 5 and onwards.
-1. Java 9 Flow API: The Reactive Streams API copy pasted into [java.util.concurrent.Flow](http://download.java.net/java/jdk9/docs/api/index.html?java/util/concurrent/Flow.html) class. More details [here](https://community.oracle.com/docs/DOC-1006738)
+1. Java 9 Flow API: The Reactive Streams API copy pasted into [java.util.concurrent.Flow](http://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.html) class. More details [here](https://community.oracle.com/docs/DOC-1006738)
 
 We are focusing on Reactor here.
 
