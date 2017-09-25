@@ -104,7 +104,7 @@ Flux<Integer> flux = Flux.just(10, 15)
 	.log() // built in logging, uses slf4j if on classpath
 	.publishOn(Schedulers.parallel()) // or subscribeOn()
 	.log()
-	.flatMap(i -> Mono.fromSupplier(() -> i * 2).publishOn(Schedulers.parallel()))
+	.flatMap(i -> Mono.fromSupplier(() -> i * 2).log().publishOn(Schedulers.parallel()))
 	.log()
 	.publishOn(Schedulers.parallel())
 	.log()
@@ -143,6 +143,35 @@ Output:
 [parallel-1] INFO reactor.Flux.MapFuseable.5 - | onComplete()
 ```
 
+Another example:
+```java
+Scheduler emitter = Schedulers.newElastic("emitter");
+Scheduler transformer = Schedulers.newElastic("transformer");
+Scheduler consumer = Schedulers.newParallel("consumer");
+
+Flux<Integer> flux = Flux.<Integer>push(e -> {
+  // imagine reading from DB row by row or from file line by line
+  for (int fi = 0; fi < 30; fi++) {
+	Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
+	e.next(fi);
+  }
+})
+	.log()
+	.subscribeOn(emitter)
+	.log();
+
+flux.flatMap(
+	// could be some other IO like reading from a second database
+	i -> Mono.fromSupplier(() -> i + " - " + i * 2)
+		.log()
+		.subscribeOn(transformer)
+		.log()
+		.publishOn(consumer))
+	.log()
+	.collectList()
+	.log().block();
+```
+
 Another example (what is the use case?):
 ```java
 Flux<LocalDateTime> flux = Flux.<LocalDateTime>create(e -> {
@@ -172,12 +201,13 @@ flux.blockFirst();
 
 As with any concurrent programming tool anything (typicall library) that's relying the thread not changing will break if you do it on multiple threds.
 
-Example: `ThreadLocal`. A typical programmer never (or at least very, very rarely) should use `ThreadLocal` directly. However libraries do use it:
-* Slf4j MDC (Mapped Diagnostic Context).
-* Transaction handling with Spring JDBC or Hibernate or MQ-s: Now this is a tricky one. If you have a transaction then you have the following options (as I see it):
-  1. Leave the whole operation single threaded
-  1. Create a single threaded `Scheduler` / transaction and push every transactional operation onto that scheduler (including transaction begin and transaction commit/rollback)
-  1. You say goodbye to your battle proven libraries and roll your own transaction handling which does not depend on `ThreadLocal` - only do this if you feel invincible.
+1. `ThreadLocal`. A typical programmer never (or at least very, very rarely) should use `ThreadLocal` directly. However libraries do use it:
+   * Slf4j MDC (Mapped Diagnostic Context).
+   * Transaction handling with Spring JDBC or Hibernate or MQ-s: Now this is a tricky one. If you have a transaction then you have the following options (as I see it):
+      1. Leave the whole operation single threaded
+      1. Create a single threaded `Scheduler` / transaction and push every transactional operation onto that scheduler (including transaction begin and transaction commit/rollback)
+      1. You say goodbye to your battle proven libraries and roll your own transaction handling which does not depend on `ThreadLocal` - only do this if you feel invincible.
+1. Make sure you don't overflow your downstreams (which does not yet support reactive programming)
 
 # Articles / Links
 ## General
