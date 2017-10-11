@@ -234,6 +234,7 @@ As with any concurrent programming tool anything (typicall library) that's relyi
 1. [Reactive Programming With Spring Reactor](http://ordina-jworks.github.io/reactive/2016/12/12/Reactive-Programming-Spring-Reactor.html)
 1. [Reactor – Simple Ways to create Flux/Mono](http://javasampleapproach.com/reactive-programming/reactor/reactor-create-flux-and-mono-simple-ways-to-create-publishers-reactive-programming)
 1. [Reactive Programming with Reactor 3 (interview + playground)](https://tech.io/blog/reactive-programming-reactor-3/)
+1. [Spring WebFlux and Mongo](https://www.reddit.com/r/java/comments/7565re/building_reactive_rest_apis_with_spring_webflux/)
 
 ## RxJava
 1. [5 Things to Know About Reactive Programming](https://www.reddit.com/r/java/comments/6x5ikr/5_things_to_know_about_reactive_programming/)
